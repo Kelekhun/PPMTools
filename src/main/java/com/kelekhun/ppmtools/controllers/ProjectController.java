@@ -35,9 +35,7 @@ public class ProjectController {
     @RequestMapping(value = "/{projectIdentifier}", method = RequestMethod.GET)
     public ResponseEntity<?> getProjectByProjectIdentifier(@PathVariable("projectIdentifier") String projectIdentifier) {
 
-        Project project = projectService.fetchProjectByProjectIdentifier(projectIdentifier);
-        return new ResponseEntity(project, HttpStatus.OK);
-
+        return new ResponseEntity(projectService.fetchProjectByProjectIdentifier(projectIdentifier), HttpStatus.OK);
     }
 
 }
