@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public interface ProjectService {
+
     Project saveOrUpdate(Project project);
 
     Project fetchProjectByProjectIdentifier(String projectIdentifier);
