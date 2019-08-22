@@ -14,7 +14,8 @@ import javax.validation.Valid;
 
 @Slf4j
 @RestController
-@RequestMapping("/api/projects/")
+@RequestMapping("/api/projects")
+@CrossOrigin
 public class ProjectController {
 
     @Autowired
@@ -47,7 +48,11 @@ public class ProjectController {
     @RequestMapping(value = "/{projectIdentifier}", method = RequestMethod.DELETE)
     public ResponseEntity<?> deleteProjectByProjectIdentifier(@PathVariable("projectIdentifier") String projectIdentifier) {
 
-        return new ResponseEntity(projectService.deleteProjectByProjectIdentifier(projectIdentifier), HttpStatus.NO_CONTENT);
+        projectService.deleteProjectByProjectIdentifier(projectIdentifier);
+
+        //Try: HttpStatus.NO_CONTENT
+        return new ResponseEntity("Project with ID: '" + projectIdentifier + "' was deleted", HttpStatus.OK);
+
     }
 
 }

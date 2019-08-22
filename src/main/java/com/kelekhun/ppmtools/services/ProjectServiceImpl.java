@@ -40,16 +40,12 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public Project deleteProjectByProjectIdentifier(String projectIdentifier) {
+    public void deleteProjectByProjectIdentifier(String projectIdentifier) {
 
         Project project = projectRepository.findByProjectIdentifier(projectIdentifier.toUpperCase());
 
         if (project == null) {
             throw new ProjectIdException("Project with projectIdentifier '" + projectIdentifier + "' does not exist");
         }
-
-        return project;
-
     }
-
 }
