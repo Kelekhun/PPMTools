@@ -62,12 +62,16 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public void deleteProjectByProjectIdentifier(String projectIdentifier) {
+    public String deleteProjectByProjectIdentifier(String projectIdentifier) {
 
         Project project = projectRepository.findByProjectIdentifier(projectIdentifier.toUpperCase());
 
         if (project == null) {
             throw new ProjectIdException("Project with projectIdentifier '" + projectIdentifier + "' does not exist");
         }
+
+        String messageOnDeletion = "Project with projectIdentifier '" + projectIdentifier + "' has been deleted";
+        projectRepository.delete(project);
+        return messageOnDeletion;
     }
 }

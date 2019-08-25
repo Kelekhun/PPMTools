@@ -34,18 +34,20 @@ public class ProjectTaskServiceImpl implements ProjectTaskService {
         // Update the Backlog sequence "PTSequence"
         BacklogSequence++;
 
+        backlog.setPTSequence(BacklogSequence);
+
         // Project Sequece "projectSequence" should be like this: IDPRO-1, IDPRO-2 ... 100, 101
         // Add Sequence to ProjectTask
         projectTask.setProjectSequence(backlog.getProjectIdentifier() + "-" + BacklogSequence);
         projectTask.setProjectIdentifer(backlog.getProjectIdentifier());
 
         // INITIAL Priority "3" when priority null: Lowest Priority
-        if (projectTask.getPriority() == 0 || projectTask.getPriority() == null) {
+        if (projectTask.getPriority() == null) {
             projectTask.setPriority(3);
         }
 
         // INITIAL Status "To-DO " when status null:
-        if (projectTask.getStatus().equals("") || projectTask.getStatus() == null) {
+        if ((projectTask.getStatus()=="") || (projectTask.getStatus() == null)) {
             projectTask.setStatus("TO_DO");
         }
 
