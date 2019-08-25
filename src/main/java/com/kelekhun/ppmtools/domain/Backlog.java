@@ -26,8 +26,7 @@ public class Backlog {
 
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "project_id", nullable = false)
-    // Disbale this comment after trying the codes: @JsonIgnore
-    @JsonIgnore
+    @JsonIgnore         //No need to load the entire Projects from Backlog side
     private Project project;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
