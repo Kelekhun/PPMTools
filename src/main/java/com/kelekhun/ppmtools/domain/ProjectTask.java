@@ -27,6 +27,9 @@ public class ProjectTask {
     @NotBlank(message = "Please include a project summary")
     private String summary;
 
+    @Column(updatable = false)
+    private String projectIdentifer;
+
     private String acceptanceCriteria;
     private String status;
     private Integer priority;
@@ -38,8 +41,6 @@ public class ProjectTask {
     @JsonIgnore
     private Backlog backlog;
 
-    @Column(updatable = false)
-    private String projectIdentifer;
 
     private Date create_At;
     private Date update_At;
