@@ -2,6 +2,7 @@ package com.kelekhun.ppmtools.domain;
 
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -11,11 +12,9 @@ import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.util.Date;
-
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-@Builder
 @Entity
 public class Project {
 
@@ -34,19 +33,21 @@ public class Project {
     @NotBlank(message = "Project description is required")
     private String description;
 
-    @JsonFormat(pattern = "mm-dd-yyyy")
+    @JsonFormat(pattern = "yyyy-mm-dd")
     private Date start_date;
 
-    @JsonFormat(pattern = "mm-dd-yyyy")
+    @JsonFormat(pattern = "yyyy-mm-dd")
     private Date end_date;
 
-    @JsonFormat(pattern = "mm-dd-yyyy")
+    @JsonFormat(pattern = "yyyy-mm-dd")
+    @Column(updatable = false)
     private Date created_At;
 
-    @JsonFormat(pattern = "mm-dd-yyyy")
+    @JsonFormat(pattern = "yyyy-mm-dd")
     private Date updated_At;
 
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "project")
+    @JsonIgnore
     private Backlog backlog;
 
     @PrePersist

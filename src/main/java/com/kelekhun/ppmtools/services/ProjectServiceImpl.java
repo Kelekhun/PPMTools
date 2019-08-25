@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 public class ProjectServiceImpl implements ProjectService {
 
     private ProjectRepository projectRepository;
+
     private BacklogRepository backlogRepository;
 
     public ProjectServiceImpl(ProjectRepository projectRepository, BacklogRepository backlogRepository) {
@@ -19,59 +20,54 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public Project saveOrUpdate(Project project) {
-        try {
-            // Making "projectIdentifier" field consistent across the method invocation so as to ease fetch and retrieval
+    public Project saveOrUpdateProject(Project project){
+        try{
             project.setProjectIdentifier(project.getProjectIdentifier().toUpperCase());
 
-            // If no "Project" Object exist: Create a Backlog Item immediately
-            if (project.getId() == null) {
+            if(project.getId()==null){
                 Backlog backlog = new Backlog();
                 project.setBacklog(backlog);
                 backlog.setProject(project);
                 backlog.setProjectIdentifier(project.getProjectIdentifier().toUpperCase());
             }
 
-            // If "Project" exists: Get the "projectIdentifier" from "BacklogRepository"
-            if (project.getId() != null) {
-                Backlog projectIdentifierFromBacklog = backlogRepository.findByProjectIdentifier(project.getProjectIdentifier().toUpperCase());
-                project.setBacklog(projectIdentifierFromBacklog);
+            if(project.getId()!=null){
+                project.setBacklog(backlogRepository.findByProjectIdentifier(project.getProjectIdentifier().toUpperCase()));
             }
 
             return projectRepository.save(project);
-        }
-        catch (Exception e){
+
+        }catch (Exception e){
             throw new ProjectIdException("Project ID '"+project.getProjectIdentifier().toUpperCase()+"' already exists");
         }
+
     }
 
     @Override
-    public Project fetchProjectByProjectIdentifier(String projectIdentifier) {
+    public Project findProjectByProjectIdentifier(String projectIdentifier){
 
         Project project = projectRepository.findByProjectIdentifier(projectIdentifier.toUpperCase());
 
-        if (project == null) {
-            throw new ProjectIdException("Project with projectIdentifier '" + projectIdentifier + "' does not exist");
+        if(project == null){
+            throw new ProjectIdException("Project ID '"+projectIdentifier+"' does not exist");
         }
+
         return project;
     }
 
     @Override
-    public Iterable<Project> findAllProjects() {
+    public Iterable<Project> findAllProjects(){
         return projectRepository.findAll();
     }
 
     @Override
-    public String deleteProjectByProjectIdentifier(String projectIdentifier) {
-
+    public void deleteProjectByProjectIdentifier(String projectIdentifier){
         Project project = projectRepository.findByProjectIdentifier(projectIdentifier.toUpperCase());
 
-        if (project == null) {
-            throw new ProjectIdException("Project with projectIdentifier '" + projectIdentifier + "' does not exist");
+        if(project == null){
+            throw  new  ProjectIdException("Cannot Project with ID '"+projectIdentifier+"'. This project does not exist");
         }
 
-        String messageOnDeletion = "Project with projectIdentifier '" + projectIdentifier + "' has been deleted";
         projectRepository.delete(project);
-        return messageOnDeletion;
     }
 }

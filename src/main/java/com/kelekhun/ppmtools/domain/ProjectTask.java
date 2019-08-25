@@ -10,10 +10,9 @@ import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.util.Date;
 
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @Data
-@Builder
 @Entity
 public class ProjectTask {
 
@@ -21,26 +20,24 @@ public class ProjectTask {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(updatable = false)
+    @Column(updatable = false, unique = true)
     private String projectSequence;
 
     @NotBlank(message = "Please include a project summary")
     private String summary;
-
-    @Column(updatable = false)
-    private String projectIdentifer;
 
     private String acceptanceCriteria;
     private String status;
     private Integer priority;
     private Date dueDate;
 
-    //ManyToOne with Backlog
+    @Column(updatable = false)
+    private String projectIdentifier;
+
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.REFRESH)
-    @JoinColumn(name = "backlog_id", updatable = false, nullable = false)
+    @JoinColumn(name="backlog_id", updatable = false, nullable = false)
     @JsonIgnore
     private Backlog backlog;
-
 
     private Date create_At;
     private Date update_At;
@@ -54,4 +51,5 @@ public class ProjectTask {
     protected void onUpdate(){
         this.update_At = new Date();
     }
+
 }

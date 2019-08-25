@@ -1,16 +1,10 @@
 package com.kelekhun.ppmtools.services;
 
 import com.kelekhun.ppmtools.domain.Project;
-import org.springframework.stereotype.Service;
 
-@Service
 public interface ProjectService {
-
-    Project saveOrUpdate(Project project);
-
-    Project fetchProjectByProjectIdentifier(String projectIdentifier);
-
+    Project saveOrUpdateProject(Project project);
+    Project findProjectByProjectIdentifier(String projectIdentifier);
     Iterable<Project> findAllProjects();
-
-    String deleteProjectByProjectIdentifier(String projectIdentifier);
+    void deleteProjectByProjectIdentifier(String projectIdentifier);
 }

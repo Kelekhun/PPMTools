@@ -3,7 +3,6 @@ package com.kelekhun.ppmtools.controllers;
 import com.kelekhun.ppmtools.domain.Project;
 import com.kelekhun.ppmtools.services.MapValidationErrorService;
 import com.kelekhun.ppmtools.services.ProjectService;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -11,9 +10,9 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
-@Slf4j
 @RestController
-@RequestMapping("/api/projects/")
+@RequestMapping("/api/projects")
+@CrossOrigin
 public class ProjectController {
 
     private ProjectService projectService;
@@ -25,32 +24,31 @@ public class ProjectController {
         this.mapValidationErrorService = mapValidationErrorService;
     }
 
-    @RequestMapping(method = RequestMethod.POST, path = "")
-    public ResponseEntity<?> createOrUpdateProject(@Valid @RequestBody Project project, BindingResult result){
+    @PostMapping("")
+    public ResponseEntity<?> createNewProject(@Valid @RequestBody Project project, BindingResult result){
 
         ResponseEntity<?> errorMap = mapValidationErrorService.getMapValidationErrors(result);
         if(errorMap!=null) return errorMap;
 
-        return new ResponseEntity<>(projectService.saveOrUpdate(project), HttpStatus.CREATED);
+        Project project1 = projectService.saveOrUpdateProject(project);
+        return new ResponseEntity<>(project1, HttpStatus.CREATED);
     }
 
-    @RequestMapping(value = "/{projectIdentifier}", method = RequestMethod.GET)
-    public ResponseEntity<?> getProjectByProjectIdentifier(@PathVariable("projectIdentifier") String projectIdentifier) {
+    @GetMapping("/{projectIdentifier}")
+    public ResponseEntity<?> getProjectByProjectIdentifier(@PathVariable String projectIdentifier){
 
-        return new ResponseEntity<>(projectService.fetchProjectByProjectIdentifier(projectIdentifier), HttpStatus.OK);
+        return new ResponseEntity<>(projectService.findProjectByProjectIdentifier(projectIdentifier), HttpStatus.OK);
     }
 
     @GetMapping("/all")
-    public Iterable<Project> getAllProjects() {
-
+    public Iterable<Project> getAllProjects(){
         return projectService.findAllProjects();
     }
 
-    @RequestMapping(value = "/{projectIdentifier}", method = RequestMethod.DELETE)
-    public ResponseEntity<?> deleteProjectByProjectIdentifier(@PathVariable("projectIdentifier") String projectIdentifier) {
 
-        return new ResponseEntity<>(projectService.deleteProjectByProjectIdentifier(projectIdentifier), HttpStatus.OK);
-        // return new ResponseEntity<>(projectService.deleteProjectByProjectIdentifier(projectIdentifier), HttpStatus.NO_CONTENT);
+    @DeleteMapping("/{projectIdentifier}")
+    public ResponseEntity<?> deleteProject(@PathVariable String projectIdentifier){
+        projectService.deleteProjectByProjectIdentifier (projectIdentifier);
+        return new ResponseEntity<String>("Project with ID: '"+projectIdentifier+"' was deleted", HttpStatus.OK);
     }
-
 }
