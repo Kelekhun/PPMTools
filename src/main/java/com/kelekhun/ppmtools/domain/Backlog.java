@@ -1,5 +1,6 @@
 package com.kelekhun.ppmtools.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -26,6 +27,7 @@ public class Backlog {
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "project_id", nullable = false)
     // Disbale this comment after trying the codes: @JsonIgnore
+    @JsonIgnore
     private Project project;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
